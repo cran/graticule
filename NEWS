@@ -1,0 +1,19 @@
+     VERSION 0.1.0
+
+o new function pathologicule to draw the other projection
+
+    VERSION 0.0.3
+
+o upgraded for release
+
+o added ice file raw data for vignette
+
+    VERSION 0.0.2
+
+o added tiles option to graticule to return polygons
+
+o added a readme for the GitHub front page
+
+    VERSION 0.0.1
+
+o basics working
