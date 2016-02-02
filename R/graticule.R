@@ -57,7 +57,7 @@ lonlatp4 <- function() {
 #'\donttest{\dontrun{
 #' library(rgdal)
 #' x <- as.matrix(expand.grid(x = seq(100, 240, by = 15), y = seq(-85, -30, by = 15)))
-#' prj <- "+proj=laea +lon_0=180 +lat_0=-70 +ellps=WGS84"
+#' prj <- "+proj=laea +lon_0=180 +lat_0=-70 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs "
 #' px <- project(x, prj)
 #' g <- graticule(unique(x[,1]), unique(x[,2]))
 #' pg <- spTransform(g, CRS(prj))
@@ -79,7 +79,8 @@ lonlatp4 <- function() {
 #' ## polygonal graticule on Orthographic projection
 #' xx <- seq(-90, 90, length = 10) + 147
 #' yy <- seq(-90, 90, length = 5)
-#'  g <- graticule(xx, yy, proj = "+proj=ortho +lon_0=147 +ellps=WGS84", tiles = TRUE)
+#' portho <- "+proj=ortho +lon_0=147 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs"
+#'  g <- graticule(xx, yy, proj = portho, tiles = TRUE)
 #'  plot(g, col = c("black", "grey"))
 #'
 #'  library(maptools)
@@ -150,7 +151,7 @@ if (tiles) {
 #' @examples
 #' xx <- c(100, 120, 160, 180)
 #' yy <- c(-80,-70,-60, -50,-45, -30)
-#' prj <- "+proj=lcc +lon_0=150 +lat_0=-80 +ellps=WGS84"
+#' prj <- "+proj=lcc +lon_0=150 +lat_0=-80 +lat_1=-85 +lat_2=-75 +ellps=WGS84"
 #' plot(graticule(lons = xx, lats = yy,  proj = prj))
 #' labs <- graticule_labels(lons = xx, lats = yy, xline = 100, yline = -80,  proj = prj)
 #' op <- par(xpd = NA)

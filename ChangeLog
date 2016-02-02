@@ -1,0 +1,412 @@
+commit bf02867c9cf5e4d29c2ad0f67ea3933c862e5824
+Author: Michael Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Feb 2 11:13:22 2016 +1100
+
+    prep for 0.1.2
+
+commit 237d973d0d8805220325b82f8683c0ebd8f62a57
+Merge: cee7b58 f481f31
+Author: Michael Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Feb 2 11:05:29 2016 +1100
+
+    merge fix
+
+commit cee7b58536e7c4a0058ca9c5f17f43a0ae6b5032
+Author: Michael Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Feb 2 10:48:14 2016 +1100
+
+    changelog 0.0.4
+
+commit 640d1c138c7cf80928885e772480576ba674066d
+Author: Michael Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Feb 2 10:47:06 2016 +1100
+
+    prepare for release
+
+commit 032e29233f3819c313081f87078bb48f13a7c4d4
+Author: Michael Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Feb 2 10:42:51 2016 +1100
+
+    more complete params for proj.4 strings
+
+commit eadf9cc272fd9908d54dc23d45bc02ac0a768e1f
+Author: Michael Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Feb 2 10:41:34 2016 +1100
+
+    cleanup
+
+commit f481f3160b7b241f2570b97ed965404defddfb3a
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Thu Jan 14 01:10:14 2016 +1100
+
+    Update README.md
+
+commit 7242f2b4c037af66134ed6c30ff85ec69b29d721
+Author: Michael Sumner <mdsumner@gmail.com.com>
+Date:   Fri Aug 21 10:37:10 2015 +1000
+
+    explicit LCC parameters - from RB and KH "The issue with PROJ 4.9.1 was that a file of defaults was omitted in the
+    distribution (now at):
+    
+    https://github.com/OSGeo/proj.4/blob/master/nad/proj_def.dat"
+
+commit 3988f844c52d190844bf16392a0539c9b206836e
+Author: Michael Sumner <mdsumner@gmail.com.com>
+Date:   Fri Aug 21 10:32:37 2015 +1000
+
+    minor
+
+commit 79992c97f04892b3a241061b93c2b8d7508ea0d6
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Thu Aug 20 07:42:39 2015 +1000
+
+    vignette index
+
+commit 5f8361cd16efcf4682e84deee2f2ff7295dd3720
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Thu Aug 20 07:31:33 2015 +1000
+
+    bump for release
+
+commit ab708f44dee7f9910b570eddab429e85535233d0
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Thu Aug 20 07:03:18 2015 +1000
+
+    links to github repo
+
+commit eff27a938ad040bd49cf88b7d1f3f5a391917f6f
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Thu Aug 20 07:02:12 2015 +1000
+
+    delete changelog
+
+commit 05cb02ac88e9de37939e3b7e561bc31f8ee3c5fc
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Thu Aug 20 06:59:05 2015 +1000
+
+    line length
+
+commit b1dc9785ecc1c6057134148f49d9ec63e064042c
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Thu Aug 20 06:56:32 2015 +1000
+
+    tests
+
+commit 667224068bb50c0ce3062d8dad406dbf66b2788b
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Thu Aug 20 06:54:17 2015 +1000
+
+    turn off examples
+
+commit d5c03fcda7a3632379fa7e50728fa562ccfd75c4
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Thu Aug 20 06:49:26 2015 +1000
+
+    missing ellps
+
+commit b9f9929b490079515830fd6b3a7238ac338a93cb
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Thu Aug 20 06:31:00 2015 +1000
+
+    release candidate
+
+commit c85c680d43597aed3e5bb2e5d04b50b84401f021
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Thu Aug 20 06:25:26 2015 +1000
+
+    clean up
+
+commit 858a8dac5c79d4cddab0700108e9adee1fb5fdb0
+Author: Michael Sumner <Michael.Sumner@aad.gov.au>
+Date:   Mon Aug 10 09:05:44 2015 +1000
+
+    pathologicule
+
+commit 18a9580205013f1313622b3a34fed6585a6b9c04
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Wed Aug 5 10:41:01 2015 +1000
+
+    Update wtri.R
+
+commit 40139b10b5b4c5f99b10c3740d3552669fe60554
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Wed Aug 5 10:40:05 2015 +1000
+
+    Update DESCRIPTION
+
+commit d68f4de4d87e48063a0bf4b0cfacced8b0eef34b
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Thu Jul 30 17:43:22 2015 -0700
+
+    add chron package dependency
+
+commit f4981954295143cd5b8922a463b726fbf91b1d80
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Sat Jul 25 16:19:07 2015 +1000
+
+    start of a built in data set
+
+commit 39edeee61a24de939cd870ae534c6ebb232583be
+Author: Michael Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Jul 21 15:30:29 2015 +1000
+
+    cran comments
+
+commit f8260e5749a06c2ce91a6b0e4af8335ff34ace88
+Author: Michael Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Jul 21 09:36:49 2015 +1000
+
+    CRAN comments
+
+commit 2ffb80f3c6d901ef240210781dac6eeeab526152
+Author: Michael Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Jul 21 09:33:45 2015 +1000
+
+    devtools dep
+
+commit 058ade09e0fd7eb59c587e871754e2f20b119a9b
+Author: Michael Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Jul 21 08:37:02 2015 +1000
+
+    add ice data example
+
+commit a6079349ebafc225ac5aff4378497041d86f3861
+Author: Michael Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Jul 21 08:36:46 2015 +1000
+
+    clean up, organize vignette
+
+commit 377e1fa84564ad9042da0a4e19acf5ddb7a60daf
+Author: Michael Sumner <mdsumner@gmail.com.com>
+Date:   Sun Jun 14 07:37:28 2015 +1000
+
+    label test stub
+
+commit 88aebeab3be2f139a45f0bbf17d433d68f921ff9
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Fri Jun 12 19:50:08 2015 +1000
+
+    Snyder link, thanks to Chris English
+
+commit 7408c29d80b246d739d2bba8474f7e003bda3ebf
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Wed Jun 10 00:20:35 2015 +1000
+
+    early tools for using the tiles option to remap rasters
+
+commit 9a207dea7aa0414d439243120c5cdd336ce6429f
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Tue Jun 9 09:26:35 2015 +1000
+
+    tidy
+
+commit ffcca282f0866a6ccba9505eac14aa433f6fba6b
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Sun Jun 7 23:28:40 2015 +1000
+
+    rebuild readme
+
+commit 884ee29258b2fbba84013d95c88d783b7c1852f1
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Sun Jun 7 23:27:47 2015 +1000
+
+    experiment with gris
+
+commit eab490d8c0969358ae9956f1c88f854ede3a466a
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Sun Jun 7 23:27:37 2015 +1000
+
+    fixed a fence post error, bug in tiles
+
+commit f53a300e8cea282a8054444a5a819061c5bd1cc1
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Sat Jun 6 23:28:17 2015 +1000
+
+    change ice file to a permanent one (not nrt)
+
+commit 493e99b9001a54f77e236a974c6fc1a95e88e5f4
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Sat Jun 6 23:20:30 2015 +1000
+
+    0.0.2
+
+commit e8ba60a02390684c3a15875e3664852d2a58c97f
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Sat Jun 6 23:20:14 2015 +1000
+
+    news
+
+commit 1219fdc6c353bd54d9ca3d069b22dec0b0ac8146
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Sat Jun 6 23:18:26 2015 +1000
+
+    clarification of data sets
+
+commit 2d2ca373e83fb2798e0f4ae34a858e3306d22fcd
+Author: Michael Sumner <mdsumner@gmail.com.com>
+Date:   Sat Jun 6 23:05:35 2015 +1000
+
+    updates after check
+
+commit 2402a6ab0214c4de29a3efcbff3eec69198f2109
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Sat Jun 6 22:46:48 2015 +1000
+
+    tidy, links
+
+commit a71188ffdfbc9b6f04ca65158143bc237f054d7b
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Sat Jun 6 22:25:13 2015 +1000
+
+    more notes on context
+
+commit fb1cf1a039f719fe3e67fd81165f5ea0e8c41a06
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Sat Jun 6 22:15:18 2015 +1000
+
+    New examples for comparing with oce
+
+commit 2fca5841ed1992f4e3baba508157e9c756a4c74a
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Sat Jun 6 17:06:56 2015 +1000
+
+    island note
+
+commit b15799116d94c530fab286d37278869ec14a2b4e
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Sat Jun 6 16:57:10 2015 +1000
+
+    more examples
+
+commit 49ff4cad9c49fa4ca45fafb6f6913973d8b82917
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Sat Jun 6 15:37:10 2015 +1000
+
+    update labels
+
+commit fce746e2e3188ae251d7318c7ed49d214a425a5e
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Sat Jun 6 15:13:48 2015 +1000
+
+    a tiles example
+
+commit 02c022535883a4121971603ffded392a86c9b9a1
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Sat Jun 6 15:13:36 2015 +1000
+
+    fixed a bug for tiles
+
+commit 303bdf63803bf2a1a4d128f51128d33552a0628c
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Sat Jun 6 14:57:55 2015 +1000
+
+    description added
+
+commit 214e368ed6ec2aebd140171a385d257121491c02
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Sat Jun 6 14:52:42 2015 +1000
+
+    polar example
+
+commit 8dcabe29235d35158b1085fa9fe8f632c7438834
+Merge: 31c14aa 642d1ad
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Sat Jun 6 14:28:51 2015 +1000
+
+    Merge branch 'master' of https://github.com/mdsumner/graticule
+
+commit 31c14aae30e35b5778b9851bf57c58787de2d66c
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Sat Jun 6 14:27:29 2015 +1000
+
+    title
+
+commit 642d1ad2a0e8076632882756062838d271f6722d
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Sat Jun 6 14:27:29 2015 +1000
+
+    title
+
+commit 8ea2a5283431f20fb9d7c130b6560cfbc4563f56
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Sat Jun 6 14:25:52 2015 +1000
+
+    readme.Rmd
+
+commit 56554d3e449609ce5f114ac65bc437f286ebcb4c
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Sat Jun 6 13:38:38 2015 +1000
+
+    change log
+
+commit dd61e0c34d7a461bc28856536a36927deabc6fc4
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Sat Jun 6 13:38:03 2015 +1000
+
+    version 0.0.2 added tiles
+
+commit be5352072ab0ed164532d0c6cdf38ac933605e46
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Wed Jun 3 00:09:18 2015 +1000
+
+    clean up
+
+commit 345d26d4e0abd594f01ddc570f6fd11835dcc259
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Wed Jun 3 00:08:31 2015 +1000
+
+    longer Description
+
+commit 1db64bfa8af42540cd696ad6b4c8132b01bc341a
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Wed Jun 3 00:08:18 2015 +1000
+
+    clean up
+
+commit 65ef4c8a041f96cf09d6d0864b4199dd717f2c96
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Wed Jun 3 00:08:08 2015 +1000
+
+    added labels, changed argument names
+
+commit 7c2cf7905402dd9339b61a390cfa8d18567a85f0
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Tue Jun 2 22:44:16 2015 +1000
+
+    labels
+
+commit 6c978824915d2d7e529ccf21686bc5edd47c8cbe
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Sat May 23 10:44:45 2015 -1000
+
+    fix malformed Suggests
+
+commit bf00f2e2f1cf1786ea9ff109831cbedca3e8063d
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Thu May 21 15:32:40 2015 -1000
+
+    bug fix for spTransform
+
+commit fb65c81f4867a600dafff9c9560db6447df89638
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Wed May 6 11:13:22 2015 -1000
+
+    fix id increment
+
+commit 134f34bb770fcd4d4ed49acc3ababbe96a9fa0e7
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Wed May 6 00:58:18 2015 -1000
+
+    work without trip hack
+
+commit 825ad267ac10fe975083421303c90b1217bc0213
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Mon May 4 15:41:18 2015 -1000
+
+    simple tests
+
+commit 07f2f39677604cf7d0a481a76b3b54e5b718b8c0
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Mon May 4 15:26:53 2015 -1000
+
+    basics working

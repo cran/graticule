@@ -18,9 +18,8 @@
 #' stere <- pathologicule(w, "+proj=stere +lon_0=147 +lat_0=-42 +ellps=WGS84")
 #' plot(laea, add = TRUE, col = "dodgerblue")
 #' plot(stere, add = TRUE, col = "firebrick")
-#'
-#' stere <- "+proj=stere +lat_0=-90 +ellps=WGS84"
-#' p <- spTransform(subset(wrld_simpl, coordinates(wrld_simpl)[,2] < -20), stere)
+#' pst90 <- "+proj=stere +lat_0=-90 +ellps=WGS84"
+#' p <- spTransform(subset(wrld_simpl, coordinates(wrld_simpl)[,2] < -20), pst90)
 #' plot(extent(p) + 1e6, asp = 1, type = "n"); plot(p, add = TRUE)
 #' laea <- pathologicule(p, "+proj=laea +lon_0=147 +lat_0=-72 +ellps=WGS84")
 #' stere <- pathologicule(p, "+proj=stere +lon_0=147 +lat_0=-42 +ellps=WGS84")
