@@ -1,12 +1,17 @@
 ---
 title: "Graticules for R"
-author: "Michael Sumner"
+author: "Michael D. Sumner"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette:
+    fig_width: 9
+    fig_height: 9
 vignette: >
   %\VignetteIndexEntry{Graticule}
-  %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 
@@ -28,6 +33,12 @@ knitr::opts_chunk$set(
 Graticules are the longitude latitude lines shown on a projected map, and defining and drawing these lines is not easy to automate. The graticule package provides the tools to 
 create and draw these lines by explicit specification by the user. This provides a good compromise between high-level automation and the flexibility to drive the low level details as needed, using base graphics in R. 
 
+
+Please note that this is an evolving topic, across a number of packages in R. There's no
+ongoing integration of how best to do this, and some of the commentary in this vignette
+will be out of date quickly as individual packages do updates. I've recorded the exact versions used for this document at the end. 
+
+This is an area that needs much more discussion and outlining of needs and experiences. 
 
 
 # Examples
@@ -107,19 +118,18 @@ Continuing from the sea ice example, build the graticule grid as actual polygons
 polargrid <- graticule(lons = c(meridians, 180), lats = parallels,  proj = projection(ice), tiles = TRUE)
 centroids <- project(coordinates(polargrid), projection(ice), inv = TRUE)
 labs <- graticule_labels(meridians, parallels,  proj = projection(ice))
-labs <- graticule_labels(as.integer(centroids[,1]), as.integer(centroids[,2]),  proj = projection(ice))
-labs <- labs[!duplicated(as.data.frame(labs)), ] ## this needs a fix
+#labs <- graticule_labels(as.integer(centroids[,1]), as.integer(centroids[,2]),  proj = projection(ice))
+#labs <- labs[!duplicated(as.data.frame(labs)), ] ## this needs a fix
 cols <- sample(colors(), nrow(polargrid))
 op <- par(mar = rep(0, 4))
 plot(polargrid, col  = cols, bg = "black")
-text(labs[labs$islon, ], lab = parse(text = labs$lab[labs$islon]), col = "black",  cex = .55, pos = 3)
-text(labs[!labs$islon, ], lab = parse(text = labs$lab[!labs$islon]), col = "black", cex = .55, pos = 1)
+text(labs[labs$islon, ], lab = parse(text = labs$lab[labs$islon]), col = "white",  cex = 0.9, pos = 3)
 par(op)
 
 ```
 ## Comparison to tools in sp and rgdal
 
-The rgdal function `llgridlines()` will draw a graticule on a map but has a few limitations. 
+The rgdal function `llgridlines()` will draw a graticule on a map but had a few limitations prior to May 2016 (some of this story is now out of date and has been improved).  
 
 * no control over the exact meridian and parallel lines to draw
 * the extent of lines is not independent of their perpendicular counterparts
@@ -131,7 +141,9 @@ Above we defined longitude and latitude ranges for an area of interest in Austra
 
 ```{r}
 plot(pmap)
+op <- par(xpd = NA)
 llgridlines(pmap)
+par(op)
 ```
 
 We cannot easily modify the lines to be only in our local area, since `llgridlines` overrides our inputs with the bounding box of the overall object. 
@@ -172,6 +184,62 @@ plot(ice, axes = FALSE)
 llgridlines(as(ice, "SpatialPoints"), easts = c(-180, -120, -60, 0, 60, 120), norths = c(-80, -70, -60, -50), ndiscr = 50)
 ```
 
+## Comparison with sf
+
+(This is pretty good, needs more exploration.)
+
+```{r}
+library(sf)
+sf_map <- st_as_sf(pmap)
+g <- st_graticule(sf_map)
+plot(st_geometry(sf_map))
+op <- par(xpd = NA)
+plot(st_geometry(g), add = TRUE)
+invisible(lapply(seq_len(nrow(g)), function(i) {
+if (g$type[i] == "N" && g$x_start[i] - min(g$x_start) < 1000)
+	text(g[i,"x_start"], g[i,"y_start"], labels = parse(text = g[i,"degree_label"]), 
+		srt = g$angle_start[i], pos = 2, cex = .7)
+if (g$type[i] == "E" && g$y_start[i] - min(g$y_start) < 1000)
+	text(g[i,"x_start"], g[i,"y_start"], labels = parse(text = g[i,"degree_label"]), 
+		srt = g$angle_start[i] - 90, pos = 1, cex = .7)
+if (g$type[i] == "N" && g$x_end[i] - max(g$x_end) > -1000)
+	text(g[i,"x_end"], g[i,"y_end"], labels = parse(text = g[i,"degree_label"]), 
+		srt = g$angle_end[i], pos = 4, cex = .7)
+if (g$type[i] == "E" && g$y_end[i] - max(g$y_end) > -1000)
+	text(g[i,"x_end"], g[i,"y_end"], labels = parse(text = g[i,"degree_label"]), 
+		srt = g$angle_end[i] - 90, pos = 3, cex = .7)
+}))
+
+par(op)
+```
+
+```{r}
+
+library(spex)
+pex <- spex(ice)
+plot(ice, axes = FALSE)
+g <- st_graticule(st_as_sf(pex))
+plot(st_geometry(g), add = TRUE) 
+op <- par(xpd = NA)
+invisible(lapply(seq_len(nrow(g)), function(i) {
+if (g$type[i] == "N" && g$x_start[i] - min(g$x_start) < 1000)
+	text(g[i,"x_start"], g[i,"y_start"], labels = parse(text = g[i,"degree_label"]), 
+		srt = g$angle_start[i], pos = 2, cex = .7)
+if (g$type[i] == "E" && g$y_start[i] - min(g$y_start) < 1000)
+	text(g[i,"x_start"], g[i,"y_start"], labels = parse(text = g[i,"degree_label"]), 
+		srt = g$angle_start[i] - 90, pos = 1, cex = .7)
+if (g$type[i] == "N" && g$x_end[i] - max(g$x_end) > -1000)
+	text(g[i,"x_end"], g[i,"y_end"], labels = parse(text = g[i,"degree_label"]), 
+		srt = g$angle_end[i], pos = 4, cex = .7)
+if (g$type[i] == "E" && g$y_end[i] - max(g$y_end) > -1000)
+	text(g[i,"x_end"], g[i,"y_end"], labels = parse(text = g[i,"degree_label"]), 
+		srt = g$angle_end[i] - 90, pos = 3, cex = .7)
+}))
+par(op)
+```
+## Comparison with the graticule in ggplot2
+
+TBD
 
 ## Comparison to **mapGrid** in oce
 
@@ -182,11 +250,13 @@ Here is our map of Victoria.
 ```{r,message=FALSE}
 library(oce)
 ## we need to hop the crevasse into another world
-pp <- coordinates(as(as(map, "SpatialLines"), "SpatialPoints"))
-mapPlot(pp[,1], pp[,2], projection = projection(pmap), longitudelim = xl, latitudelim = yl, type = "n", grid = FALSE)
+
+pp <- raster::geom(map, sepNA = TRUE)
+mapPlot(pp[,"x"], pp[,"y"], projection = projection(pmap), longitudelim = xl, latitudelim = yl, type = "p", grid = FALSE)
 mapGrid(longitude = lons, latitude = lats)
 ## and to prove that all is well in the world
-plot(pmap, add = TRUE)
+plot(pmap, add = TRUE, col = "grey")
+mapGrid(longitude = lons, latitude = lats)
 
 ```
 
@@ -204,7 +274,7 @@ mapTissot()
 
 ```
 
-Also see here for another implementation of the Tissot Indicatrix in R by user [whuber on GIS StackExchange](http://gis.stackexchange.com/questions/31651/an-example-tissot-ellipse-for-an-equirectangular-projection). This is available in the [dev package tissot](https://github.com/mdsumner/tissot). 
+Also see here for another implementation of the Tissot Indicatrix in R by user [whuber on GIS StackExchange](https://gis.stackexchange.com/questions/31651/an-example-tissot-ellipse-for-an-equirectangular-projection). This is available in the [dev package tissot](https://github.com/mdsumner/tissot). 
 
 
 ## Notes
@@ -213,7 +283,7 @@ Efforts could be shared with the sp and rgdal projects to improve the functional
 
 ### Terminology
 
-I tend to use the same terminology as used within [Manifold System](http://www.manifold.net/index.shtml) *because it's so awesome* and that's where I first learnt about most of these concepts. In my experience not many people use the term *graticule* in this way, so take it from the master himself on page 8 (Snyder, 1987): 
+I tend to use the same terminology as used within [Manifold System](http://www.manifold.net/) *because it's so awesome* and that's where I first learnt about most of these concepts. In my experience not many people use the term *graticule* in this way, so take it from the master himself on page 8 (Snyder, 1987): 
 
 > To identify the location of points on the Earth, a graticule or network of longitude
 > and latitude lines has been superimposed on the surface. They are commonly
@@ -223,7 +293,7 @@ I tend to use the same terminology as used within [Manifold System](http://www.m
 
 ## References
 
-[Snyder, John Parr. Map projections--A working manual. No. 1395. USGPO, 1987.](http://pubs.er.usgs.gov/djvu/PP/PP_1395.pdf)
+[Snyder, John Parr. Map projections--A working manual. No. 1395. USGPO, 1987.](https://pubs.er.usgs.gov/publication/pp1395)
 
 ## Environment
 

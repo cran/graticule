@@ -3,7 +3,6 @@
 \docType{package}
 \name{graticule}
 \alias{graticule}
-\alias{graticule-package}
 \title{graticule: graticule lines for maps}
 \usage{
 graticule(lons, lats, nverts = 60, xlim, ylim, proj = NULL, tiles = FALSE)
@@ -24,8 +23,6 @@ graticule(lons, lats, nverts = 60, xlim, ylim, proj = NULL, tiles = FALSE)
 \item{tiles}{if \code{TRUE} return polygons as output}
 }
 \description{
-graticule: graticule lines for maps
-
 Specify the creation of lines along meridians by specifying their placement
 at particular \code{lons} (longitudes) and \code{lats} (latitudes) and their extents
 with \code{xlim} (extent of parallel line in longitude) and \code{ylim} (extent of meridional line in latitude).
@@ -33,14 +30,15 @@ with \code{xlim} (extent of parallel line in longitude) and \code{ylim} (extent 
 \details{
 Provide a valid PROJ.4 string to return the graticule lines in this projection. If this is not specified the graticule
 lines are returned in their original longlat / WGS84.
-
+All segments are discretized as _rhumb_lines_ at `getOption("graticule.mindist")` metres, which
+defaults to `5e4`.
 The arguments \code{xlim}, \code{ylim} and \code{nverts} are ignored if \code{tiles} is \code{TRUE}.
 }
 \examples{
 \donttest{\dontrun{
 library(rgdal)
 x <- as.matrix(expand.grid(x = seq(100, 240, by = 15), y = seq(-85, -30, by = 15)))
-prj <- "+proj=laea +lon_0=180 +lat_0=-70 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs "
+prj <- "+proj=laea +lon_0=180 +lat_0=-70 +ellps=WGS84"
 px <- project(x, prj)
 g <- graticule(unique(x[,1]), unique(x[,2]))
 pg <- spTransform(g, CRS(prj))
@@ -62,14 +60,12 @@ text(g3labs, lab = parse(text = g3labs$lab))
 ## polygonal graticule on Orthographic projection
 xx <- seq(-90, 90, length = 10) + 147
 yy <- seq(-90, 90, length = 5)
-portho <- "+proj=ortho +lon_0=147 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs"
- g <- graticule(xx, yy, proj = portho, tiles = TRUE)
+ g <- graticule(xx, yy, proj = "+proj=ortho +lon_0=147 +ellps=WGS84", tiles = TRUE)
  plot(g, col = c("black", "grey"))
 
  library(maptools)
  data(wrld_simpl)
- w <- spTransform(subset(wrld_simpl, NAME == "Australia"), CRS(projection(g)))
+ w <- spTransform(subset(wrld_simpl, NAME == "Australia"), CRS(proj4string(g)))
  plot(w, add = TRUE, border = "dodgerblue")
  }}
 }
-

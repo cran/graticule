@@ -1,4 +1,4 @@
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE------------------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -8,7 +8,7 @@ knitr::opts_chunk$set(
 
 
 
-## ----message=FALSE-------------------------------------------------------
+## ----message=FALSE------------------------------------------------------------
 library(rgdal)
 library(raster)
 library(rworldmap)
@@ -47,7 +47,7 @@ text(subset(labs, !labs$islon), lab = parse(text = labs$lab[!labs$islon]), pos =
 par(op)
 
 
-## ----message=FALSE-------------------------------------------------------
+## ----message=FALSE------------------------------------------------------------
 library(raster)
 library(graticule)
 library(rgdal)
@@ -66,31 +66,32 @@ text(labs, lab = parse(text= labs$lab), col= c("firebrick", "darkblue")[labs$isl
 title(sprintf("Sea ice concentration %s", gsub(".bin", "", basename(tfile))), cex.main = 0.8)
 title(sub = projection(ice), cex.sub = 0.6)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 polargrid <- graticule(lons = c(meridians, 180), lats = parallels,  proj = projection(ice), tiles = TRUE)
 centroids <- project(coordinates(polargrid), projection(ice), inv = TRUE)
 labs <- graticule_labels(meridians, parallels,  proj = projection(ice))
-labs <- graticule_labels(as.integer(centroids[,1]), as.integer(centroids[,2]),  proj = projection(ice))
-labs <- labs[!duplicated(as.data.frame(labs)), ] ## this needs a fix
+#labs <- graticule_labels(as.integer(centroids[,1]), as.integer(centroids[,2]),  proj = projection(ice))
+#labs <- labs[!duplicated(as.data.frame(labs)), ] ## this needs a fix
 cols <- sample(colors(), nrow(polargrid))
 op <- par(mar = rep(0, 4))
 plot(polargrid, col  = cols, bg = "black")
-text(labs[labs$islon, ], lab = parse(text = labs$lab[labs$islon]), col = "black",  cex = .55, pos = 3)
-text(labs[!labs$islon, ], lab = parse(text = labs$lab[!labs$islon]), col = "black", cex = .55, pos = 1)
+text(labs[labs$islon, ], lab = parse(text = labs$lab[labs$islon]), col = "white",  cex = 0.9, pos = 3)
 par(op)
 
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 plot(pmap)
+op <- par(xpd = NA)
 llgridlines(pmap)
+par(op)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 plot(pmap)
 lons <- seq(140, 150, length = 5)
 lats <- seq(-40, -35, length = 6)
 llgridlines(pmap, easts = lons, norths = lats)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 op <- par(xpd = NA)
 ex <- as(extent(range(lons), range(lats)), "SpatialPolygons")
 projection(ex) <- llproj
@@ -101,26 +102,76 @@ llgridlines(pex, easts = lons, norths = lats)
 par(op)
 
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 plot(ice, axes = FALSE)
 ##llgridlines(ice)  does not understand a raster
 llgridlines(as(ice, "SpatialPoints"))
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 plot(ice, axes = FALSE)
 llgridlines(as(ice, "SpatialPoints"), easts = c(-180, -120, -60, 0, 60, 120), norths = c(-80, -70, -60, -50), ndiscr = 50)
 
-## ----message=FALSE-------------------------------------------------------
+## -----------------------------------------------------------------------------
+library(sf)
+sf_map <- st_as_sf(pmap)
+g <- st_graticule(sf_map)
+plot(st_geometry(sf_map))
+op <- par(xpd = NA)
+plot(st_geometry(g), add = TRUE)
+invisible(lapply(seq_len(nrow(g)), function(i) {
+if (g$type[i] == "N" && g$x_start[i] - min(g$x_start) < 1000)
+	text(g[i,"x_start"], g[i,"y_start"], labels = parse(text = g[i,"degree_label"]), 
+		srt = g$angle_start[i], pos = 2, cex = .7)
+if (g$type[i] == "E" && g$y_start[i] - min(g$y_start) < 1000)
+	text(g[i,"x_start"], g[i,"y_start"], labels = parse(text = g[i,"degree_label"]), 
+		srt = g$angle_start[i] - 90, pos = 1, cex = .7)
+if (g$type[i] == "N" && g$x_end[i] - max(g$x_end) > -1000)
+	text(g[i,"x_end"], g[i,"y_end"], labels = parse(text = g[i,"degree_label"]), 
+		srt = g$angle_end[i], pos = 4, cex = .7)
+if (g$type[i] == "E" && g$y_end[i] - max(g$y_end) > -1000)
+	text(g[i,"x_end"], g[i,"y_end"], labels = parse(text = g[i,"degree_label"]), 
+		srt = g$angle_end[i] - 90, pos = 3, cex = .7)
+}))
+
+par(op)
+
+## -----------------------------------------------------------------------------
+
+library(spex)
+pex <- spex(ice)
+plot(ice, axes = FALSE)
+g <- st_graticule(st_as_sf(pex))
+plot(st_geometry(g), add = TRUE) 
+op <- par(xpd = NA)
+invisible(lapply(seq_len(nrow(g)), function(i) {
+if (g$type[i] == "N" && g$x_start[i] - min(g$x_start) < 1000)
+	text(g[i,"x_start"], g[i,"y_start"], labels = parse(text = g[i,"degree_label"]), 
+		srt = g$angle_start[i], pos = 2, cex = .7)
+if (g$type[i] == "E" && g$y_start[i] - min(g$y_start) < 1000)
+	text(g[i,"x_start"], g[i,"y_start"], labels = parse(text = g[i,"degree_label"]), 
+		srt = g$angle_start[i] - 90, pos = 1, cex = .7)
+if (g$type[i] == "N" && g$x_end[i] - max(g$x_end) > -1000)
+	text(g[i,"x_end"], g[i,"y_end"], labels = parse(text = g[i,"degree_label"]), 
+		srt = g$angle_end[i], pos = 4, cex = .7)
+if (g$type[i] == "E" && g$y_end[i] - max(g$y_end) > -1000)
+	text(g[i,"x_end"], g[i,"y_end"], labels = parse(text = g[i,"degree_label"]), 
+		srt = g$angle_end[i] - 90, pos = 3, cex = .7)
+}))
+par(op)
+
+## ----message=FALSE------------------------------------------------------------
 library(oce)
 ## we need to hop the crevasse into another world
-pp <- coordinates(as(as(map, "SpatialLines"), "SpatialPoints"))
-mapPlot(pp[,1], pp[,2], projection = projection(pmap), longitudelim = xl, latitudelim = yl, type = "n", grid = FALSE)
+
+pp <- raster::geom(map, sepNA = TRUE)
+mapPlot(pp[,"x"], pp[,"y"], projection = projection(pmap), longitudelim = xl, latitudelim = yl, type = "p", grid = FALSE)
 mapGrid(longitude = lons, latitude = lats)
 ## and to prove that all is well in the world
-plot(pmap, add = TRUE)
+plot(pmap, add = TRUE, col = "grey")
+mapGrid(longitude = lons, latitude = lats)
 
 
-## ----message = FALSE-----------------------------------------------------
+## ----message = FALSE----------------------------------------------------------
 ipts <- coordinates(spTransform(xyFromCell(ice, sample(ncell(ice), 1000), spatial = TRUE), CRS(llproj)))
 mapPlot(ipts[,1], ipts[,2], projection = projection(ice), type = "n", grid = FALSE)
 
@@ -129,6 +180,6 @@ mapGrid(10, 15)
 mapTissot()
 
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 devtools::session_info()
 

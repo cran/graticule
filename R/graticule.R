@@ -3,10 +3,29 @@
 #' @docType package
 #' @name graticule
 NULL
-limfun <- function(x, lim, nd = 60, meridian = TRUE) {
+limfun <- function(x, lim, meridian = TRUE) {
+
+  mindist <- getOption("graticule.mindist")
+  if (is.na(mindist) || is.null(mindist) || !is.numeric(mindist)) {
+    mindist <- 5e4
+    warning(sprintf("option('graticule.mindist') is malformed, using %fm", mindist))
+  }
+ if (!meridian) {
+    out <- ll_extent(lim, c(x, x), mindist = mindist)
+  } else {
+    out <- ll_extent(c(x, x), lim, mindist = mindist)
+  }
+  out
+}
+
+step_fun <- function(x, steps, nd = 60, meridian = TRUE) {
   ind <- 1:2
+
   if (!meridian) ind <- 2:1
-  cbind(x = x, y = seq(lim[1], lim[2], length = nd))[, ind]
+  op <- options(warn = -1)
+  on.exit(options(op))
+  step_seg <- as.data.frame(utils::head(matrix(steps, nrow = length(steps)+1, ncol = 2), -2))
+  lapply(split(step_seg, 1:nrow(step_seg)), function(a) cbind(x = x, y = seq(unlist(a)[1], unlist(a)[2], length = nd))[, ind])
 }
 
 buildlines <- function(x) {
@@ -42,7 +61,8 @@ lonlatp4 <- function() {
 #'
 #' Provide a valid PROJ.4 string to return the graticule lines in this projection. If this is not specified the graticule
 #' lines are returned in their original longlat / WGS84.
-#'
+#' All segments are discretized as _rhumb_lines_ at `getOption("graticule.mindist")` metres, which
+#' defaults to `5e4`.
 #' The arguments \code{xlim}, \code{ylim} and \code{nverts} are ignored if \code{tiles} is \code{TRUE}.
 #' @param lons longitudes for meridional lines
 #' @param lats latitudes for parallel lines
@@ -57,7 +77,7 @@ lonlatp4 <- function() {
 #'\donttest{\dontrun{
 #' library(rgdal)
 #' x <- as.matrix(expand.grid(x = seq(100, 240, by = 15), y = seq(-85, -30, by = 15)))
-#' prj <- "+proj=laea +lon_0=180 +lat_0=-70 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs "
+#' prj <- "+proj=laea +lon_0=180 +lat_0=-70 +ellps=WGS84"
 #' px <- project(x, prj)
 #' g <- graticule(unique(x[,1]), unique(x[,2]))
 #' pg <- spTransform(g, CRS(prj))
@@ -79,21 +99,29 @@ lonlatp4 <- function() {
 #' ## polygonal graticule on Orthographic projection
 #' xx <- seq(-90, 90, length = 10) + 147
 #' yy <- seq(-90, 90, length = 5)
-#' portho <- "+proj=ortho +lon_0=147 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs"
-#'  g <- graticule(xx, yy, proj = portho, tiles = TRUE)
+#'  g <- graticule(xx, yy, proj = "+proj=ortho +lon_0=147 +ellps=WGS84", tiles = TRUE)
 #'  plot(g, col = c("black", "grey"))
 #'
 #'  library(maptools)
 #'  data(wrld_simpl)
-#'  w <- spTransform(subset(wrld_simpl, NAME == "Australia"), CRS(projection(g)))
+#'  w <- spTransform(subset(wrld_simpl, NAME == "Australia"), CRS(proj4string(g)))
 #'  plot(w, add = TRUE, border = "dodgerblue")
 #'  }}
-#' @importFrom raster isLonLat raster rasterToPolygons extent values<- ncell
+#' @importFrom raster isLonLat raster extent values<- ncell res
 #' @importFrom sp SpatialLinesDataFrame Line Lines SpatialLines CRS spTransform
 graticule <- function(lons, lats, nverts = 60, xlim, ylim, proj = NULL, tiles = FALSE) {
   if (is.null(proj)) proj <- lonlatp4()
   proj <- as.character(proj)  ## in case we are given CRS
   trans <- FALSE
+  if (tiles) {
+    if (!missing(xlim)) {
+      warning("xlim is ignored if 'tiles = TRUE'")
+    }
+    if (!missing(ylim)) {
+      warning("ylim is ignored if 'tiles = TRUE'")
+    }
+
+  }
   if (!raster::isLonLat(proj)) trans <- TRUE
   if (missing(lons)) {
     #usr <- par("usr")
@@ -103,15 +131,10 @@ graticule <- function(lons, lats, nverts = 60, xlim, ylim, proj = NULL, tiles = 
   if (missing(lats)) {
       lats <- seq(-90, 90, by = 10)
   }
+
 if (tiles) {
-  ## build a raster and return the polygons
-  rr <- raster::raster(extent(range(lons), range(lats)), nrows = length(lats)-1, ncols = length(lons)-1, crs = lonlatp4())
-  values(rr) <- seq(ncell(rr))
-  ## we need to not use raster for this
-  nodes <- c(4, 8, 16)[pmax(1, findInterval(nverts, c(2, 3, 5)))]
-  pp <- raster::rasterToPolygons(rr, dissolve = TRUE, n = nodes)
-  if (trans) pp <- sp::spTransform(pp, sp::CRS(proj))
- return(pp)
+  pp <- graticule_tiles(lons, lats, proj = proj)
+  return(pp)
 }
   if (missing(xlim)) xlim <- range(lons)
   if (missing(ylim)) ylim <- range(lats)
@@ -123,13 +146,13 @@ if (tiles) {
   xs$type <- "meridian"
   ys$type <- "parallel"
   d <- rbind(xs, ys)
-#  coordinates(d) <- ~x+y
- # proj4string(d) <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0")
+  #  coordinates(d) <- ~x+y
+  # proj4string(d) <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0")
   d0 <- split(d, d$id)
   l <- vector("list", length(d0))
   for (i in seq_along(d0)) l[[i]] <- sp::Lines(list(sp::Line(as.matrix(d0[[i]][, c("x", "y")]))), ID = as.character(i))
   l <- sp::SpatialLinesDataFrame(sp::SpatialLines(l, proj4string = sp::CRS(lonlatp4())),
-                        data.frame(ID = as.character(seq_along(l))))
+                                 data.frame(ID = as.character(seq_along(l))))
   if (trans) l <- sp::spTransform(l, sp::CRS(proj))
   l
   #d0$type <- c(rep("meridian", length(unique(xs$id))), rep("parallel", length(unique(ys$id))))
@@ -185,5 +208,6 @@ graticule_labels <- function(lons, lats, xline, yline, proj = NULL) {
   if (trans) {
     l <- sp::spTransform(l, CRS(proj))
   }
+
   l
 }
