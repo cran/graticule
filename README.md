@@ -5,15 +5,9 @@
 
 <!-- badges: start -->
 
-[![Travis build
-status](https://travis-ci.org/mdsumner/graticule.svg?branch=master)](https://travis-ci.org/mdsumner/graticule)
-[![AppVeyor build
-status](https://ci.appveyor.com/api/projects/status/github/mdsumner/graticule?branch=master&svg=true)](https://ci.appveyor.com/project/mdsumner/graticule)
-[![Codecov test
-coverage](https://codecov.io/gh/mdsumner/graticule/branch/master/graph/badge.svg)](https://codecov.io/gh/mdsumner/graticule?branch=master)
 [![CRAN
-status](https://www.r-pkg.org/badges/version/graticule)](https://cran.r-project.org/package=graticule)
-[![CRAN\_Download\_Badge](http://cranlogs.r-pkg.org/badges/graticule)](https://cran.r-project.org/package=graticule)
+status](https://www.r-pkg.org/badges/version/graticule)](https://CRAN.R-project.org/package=graticule)
+[![R-CMD-check](https://github.com/hypertidy/graticule/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/hypertidy/graticule/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 Graticules are the longitude latitude lines shown on a projected map,
@@ -36,7 +30,7 @@ And the development version from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("mdsumner/graticule")
+devtools::install_github("hypertidy/graticule")
 ```
 
 ## Example
@@ -77,13 +71,55 @@ plot(wedge)
 points(as(wedge, "SpatialPoints"))
 ```
 
-<img src="man/figures/README-wedge-1.png" width="100%" /> \#\# Known
-Issues
+<img src="man/figures/README-wedge-1.png" width="100%" />
+
+## Quick and dirty plot
+
+Give it a raster and let it plot, can provide `levels` as per contour
+(values of longitude or latitude to draw as lines), and separate
+longitude or latitude plot on their own.
+
+Sometimes it’s enough, sometimes we can muck around to get what we want.
+
+``` r
+tfile <- system.file("extdata",  "nt_20140320_f17_v01_s.bin", package = "graticule", mustWork = TRUE)
+ice <- raster::raster(tfile)
+ice[!ice > 0] <- NA
+raster::plot(ice, col = palr::ice_pal(100))
+lonlat(ice)
+```
+
+<img src="man/figures/README-lonlat-1.png" width="100%" />
+
+``` r
+
+raster::plot(ice, col = palr::ice_pal(100))
+lonlat(ice, lon = TRUE, levels = seq(-180, 165, by = 15))
+lonlat(ice, lat = TRUE, levels = seq(-85, -40, by = 5))
+```
+
+<img src="man/figures/README-lonlat-2.png" width="100%" />
+
+``` r
+
+## not much good so let's get the actual arrays
+lon <- lonlat(ice, plot = FALSE)[[1]]
+lat <- lonlat(ice,  plot = FALSE)[[2]]
+lon[lat < -85] <- NA
+raster::plot(ice, col = palr::ice_pal(100))
+raster::contour(lon, add = TRUE)
+lonlat(ice, lat = TRUE, levels = seq(-85, -40, by = 5))
+```
+
+<img src="man/figures/README-lonlat-3.png" width="100%" />
+
+## Known Issues
 
 Please feel free to share your experiences and report problems at
-<https://github.com/mdsumner/graticule/issues>
+<https://github.com/hypertidy/graticule/issues>
 
 -   general problems with segmentation, this is not done smartly yet
+    (see hypertidy/bigcurve or the s2 package)
 -   There’s work needed for when `graticule_labels()` are created
     without using `xline/yline`, need more careful separation between
     generating every combination in the grid versus single lines
@@ -92,5 +128,5 @@ Please feel free to share your experiences and report problems at
 
 Please note that the ‘graticule’ project is released with a [Contributor
 Code of
-Conduct](https://github.com/mdsumner/graticule/blob/master/CODE_OF_CONDUCT.md).
+Conduct](https://github.com/hypertidy/graticule/blob/master/CODE_OF_CONDUCT.md).
 By contributing to this project, you agree to abide by its terms.
